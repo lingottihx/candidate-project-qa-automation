@@ -1,45 +1,268 @@
 # ZoomCare Candidate Code Challenge - QA / Automation
 
-![ZoomCare Logo](https://avatars0.githubusercontent.com/u/48925141?s=150)
+## Part 1
 
-Welcome to the ZoomCare QA / Automation Candidate Code Challenge. If you are here you most likely have interest in joining the ZoomCare Quality Engineering Team and have been asked to respond to this challenge. If you came here on your own, you are welcome to explore the challenge and use it to sharpen your skills or prepare for future interviews.
+## Test Case 1
 
-The ZoomCare Candidate Code Challenges are intended to take around 2-3 hours to complete. This is not intended to be an extensive test of your programing skills or knowledge, but rather as a starting point for further conversations during the application process.
+* Test Scenario
 
-## Instructions
+A user navigates to the schedule page and gets available health providers.
 
-This Candidate Code Challenge is geared specifically toward QA Engineers with end-to-end testing and programming experience. The challenge is split into two parts: the first is to devise a test plan for the prompt provided, while the second is to create a basic automation framework that executes some of the test cases written. Both parts are of equal importance, but you'll likely spend more time on Part 2 (automation).
+![Screen capture](./images/TestCase1.JPG)
 
-Specifically:
-1. Create a fork of this repository into your personal GitHub space.
-2. Wipe the contents of this README file, and in its place, create two sections: Test Cases and Automation Instructions.
-3. Use the Test Cases section in the README file to write all of your test cases in response to the first part.
-4. Set up an automation framework and its associated pages/specs/utilities/etc within the repository.
-5. Use the Automation Instructions section in the README to provide instructions for how to set up the framework. Assume the user has nothing pre-installed and also does not know how to use the framework you chose.
-7. Create a Pull Request back to the original project.
+* Test Steps
 
-## Prompt
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
 
-ZoomCare has a unique promise: we make healthcare delightful by giving it to you on your terms. No matter where or when you want care, ZoomCare can provide complete care for all that ails them, in the palm of their hand. The most critical way we deliver on that promise is through our online scheduling system, which is completely self-service by our patients and coordinates the vast majority of appointments we serve. We call this the "Search/Sechedule Moment". Simply visit our public website at https://www.zoomcare.com, and you'll immediately be greeted with a scheduler to get you on your way.
+* Test Data
 
-### Part 1
+Not applicable.
 
-Devise a set of test scenarios / acceptance criteria that covers enough breadth of this feature for a daily smoke test.
+* Expected Results
 
-A few asks and helpful tips:
-- Keep your focus to just the scheduling page (https://www.zoomcare.com/schedule). Anything else is not within scope of this challenge.
-- If you click on a time slot, it will redirect you to a login screen if you don't have an account. We aren't concerned with the behavior past this point; focus on the behavior that displays to an unauthenticated guest just browsing our schedule. You can make an account if you wish, but these are real appointments - **please do not actually schedule any appointments for testing**.
-- We know there are many, many links on our website. Be selective in which links you want to verify work, and what page they should open up under what condition.
-- Prioritize your plan; try to keep your list to 8-10 test cases.
-- We're interested in testing the application's front-end user interface, from an end-to-end perspective. Thinking about what the back-end (ie. API endpoint) does is useful, but is not a requirement for this challenge.
-- Think about the entire workflow: what happens if you change X parameter? Does Y also change depending on X? What about things changing without any interaction after a period of time?
+1. The title of the page is "Schedule | ZoomCare".
+2. It shows fixed in the screen:
+    1. The "Zoom Care" logo.
+    2. A number of links to the main sections of the site:
+        1. Schedule. It should be shown with light blue color.
+        2. Locations.
+        3. Services.
+        4. Pricing & Insurance.
+    3. A Login button.
+3. It shows default search criteria in the filters:
+    1. City: "Portland, OR".
+    2. Service: "Illness/injury".
+    3. Date: If there are no available health providers for today, it would show the next available date.
+4. It shows the buttons "Clinic Care" and "VideoCare (TM)".
+5. It shows a table with the header "Illness/Injury Clinic Visit" with the following information:
+    1. There is a link name "Info".
+    2. There is a link with the dollar sign ($).
+    3. A list of Health providers with the following:
+        1. Clinic name.
+        2. Clinic address.
+        3. Clinic city and state code matching the search criteria. Postal code of the clinic.
+        4. A marker link icon with the text "Map".
+        5. A link named "View Clinic Services".
+        6. A list of professionals working in that clinic according to the search criteria:
+            1. Professional photo.
+            2. Professional name and title.
+            3. Professional team.
+            4. Availability date. It should match the search criteria "Today" month and date.
+            5. Time zone according to the city and season.
+            6. Up to 5 buttons with available times.
+            7. A "More" button should be visible when the there are more than five available times.
+6. The page footer. This section is the same all across the site.
 
-### Part 2
+## Test Case 2
 
-Take at least three cases that you've written in Part 1, and propose how they would transfer into an automated test by coding/scripting them with a framework and/or tool. Use whatever you're comfortable with (Selenium, Cypress, etc.), and you can write in any programming/scripting language you choose.
+* Test scenario
 
-What we're looking for:
-- Verifying you can write code and/or script well (knowledge of built-in functions for your chosen language, good organization of classes/functions, reasonable use of comments, etc.)
-- You have a clear vision for how to automate (using POM or Screenplay methodology, BDD or TDD best practices, etc.)
-- You know how to get the results you need (knowledge of the framework(s) and libraries chosen, and using their functionality appropriately)
-- Working code is good. Pretty working code is better. Fast, pretty, working code is best.
+Unauthenticated user searches the first time slot and schedules it.
+
+![Screen capture](./images/TestCase2.JPG)
+
+![Screen capture](./images/TestCase2a.JPG)
+
+![Screen capture](./images/TestCase2b.JPG)
+
+* Test Steps
+
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
+2. Click in the the first dropdown.
+3. Select a city.
+4. Click in the second dropdown.
+5. Select a service.
+6. Click in the third dropdown.
+7. Select a date.
+8. Click the "Refresh" button.
+9. Click an available time slot.
+
+* Test Data
+
+1. City: "Portland, OR".
+2. Service: "Primary Care".
+3. Date: "Tomorrow". Note that there may be no health providers for that date. In that case, find a date having providers available.
+
+* Expected Results
+
+The browser redirects to a login screen.
+
+## Test Case 3
+
+* Test scenario
+
+Unauthenticated user search for a time slot and wants more info about a service.
+
+![Screen capture](./images/TestCase3a.JPG)
+
+![Screen capture](./images/TestCase3b.JPG)
+
+* Test Steps
+
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
+2. Click in the the first dropdown.
+3. Select a city.
+4. Click in the second dropdown.
+5. Scroll down to the service name and click it.
+6. Click in the third dropdown.
+7. Select a date.
+8. Click the "Refresh" button.
+9. Click the "Info | $" text.
+
+* Test Data
+
+1. City: "Portland, OR".
+2. Service: "Women health's (Ginecology)".
+
+* Expected Results
+
+It shows a popup with the following:
+
+1. The service description.
+2. A link "More Info" that targets to the service page.
+3. Health insurance accepted, if any.
+4. Type of visit
+5. Uninsured rates.
+
+It should disappear if clicked "Info | $" again.
+
+## Test Case 4
+
+* Test scenario
+
+User navigates to the schedule page and wants to see health providers near the user location.  
+
+![Screen capture](./images/TestCase4.JPG)
+
+* Test Steps
+
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
+2. Click in the the first dropdown.
+3. Click in "USE MY LOCATION".
+4. Allow sharing your location in the browser.
+
+* Test Data
+
+1. Location: "101 NW 13th Avenue, Portland, OR".
+2. Symptoms: "Illness/injury".
+
+* Expected Results
+
+It shows health providers near the user location.
+
+## Test Case 5
+
+* Test scenario
+
+User navigates to the schedule page and wants to see where the clinic is in the map.  
+
+![Screen capture](./images/TestCase5.JPG)
+
+* Test Steps
+
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
+2. Click in the the "Map" text.
+
+* Test Data
+
+Not applicable.
+
+* Expected Results
+
+The browser opens a new tab with the Google Maps page showing a marker with the clinic address.
+
+## Test Case 6
+
+* Test scenario
+
+Unauthenticated user search for a time slot and wants to know what services a clinic provides.
+
+![Screen capture](./images/TestCase6.JPG)
+
+* Test Steps
+
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
+2. Click in the the first dropdown.
+3. Select a city.
+4. Click in the second dropdown.
+5. Scroll down to the service name and click it.
+6. Click in the third dropdown.
+7. Select a date.
+8. Click the "Refresh" button.
+9. Click the "View Clinic Services" text.
+
+* Test Data
+
+1. City: "Portland, OR".
+2. Service: "Women health's (Ginecology)".
+
+* Expected Results
+
+It shows a popup with the following:
+
+1. A cross icon that allows closing the dialog.
+2. A list of services available at that clinic.
+3. A link "See More Details" that targets to a page with info about that clinic.
+
+It should disappear if clicked the cross icon or the "View Clinic Services" again.
+
+## Test Case 7
+
+Unauthenticated user search the last available time slot.
+
+![Screen capture](./images/TestCase7a.JPG)
+
+![Screen capture](./images/TestCase7b.JPG)
+
+* Test Steps
+
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
+2. Click in the the first dropdown.
+3. Select a city.
+4. Click in the second dropdown.
+5. Scroll down to the service name and click it.
+6. Click in the third dropdown.
+7. Click in the right arrow icon in order to see the next month dates.
+8. Click in the last available date.
+9. Click the "Refresh" button.
+10. Click the first "More" button right to a time slot.
+
+* Test Data
+
+1. City: "Portland, OR".
+2. Service: "Women health's (Ginecology)".
+
+* Expected Results
+
+It shows more available time slots for the health professional and provider.
+It also shows a "Less" button that hides the latest time slots when clicked.
+
+## Test Case 8
+
+* Test scenario
+
+Unauthenticated user search for the next available time slots for the desired clinic.
+
+![Screen capture](./images/TestCase8.JPG)
+
+* Test Steps
+
+1. Go to the schedule page <https://www.zoomcare.com/schedule>.
+2. Click in the the first dropdown.
+3. Select a city.
+4. Click in the second dropdown.
+5. Select a service.
+6. Click the "Refresh" button.
+7. Scroll down to the clinic without time slots available.
+8. Click the "Next available:" button.
+
+* Test Data
+
+1. City: "Portland, OR".
+2. Symptoms: "Woman's health (Ginecology)".
+3. Date: "Today".
+4. Clinic: "Pearl District - Midnight"
+
+* Expected Results
+
+The search filter date updates to the date in the "Next Available:" button. Then, it shows time slots for the desired clinic.
