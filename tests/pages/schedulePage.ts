@@ -93,4 +93,17 @@ export class SchedulePage {
             getClinic
         };
     }
+
+    public getLocationOption (location: string) {
+        return this.page.getByTestId(`text-quick-selector-option-location-${location}`);
+    }
+
+    public getServiceOption (service: string) {
+        return this.page.getByTestId(`text-quick-selector-option-service-${service}`);
+    }
+
+    public getDate (day:number) {
+        return this.page.getByText(`${day}`, { exact: true} );
+    }
+
 } 
