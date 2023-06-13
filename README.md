@@ -265,3 +265,22 @@ Unauthenticated user search for the next available time slots for the desired cl
 * Expected Results
 
 The search filter date updates to the date in the "Next Available:" button. Then, it shows time slots for the desired clinic.
+
+## Part 2
+
+### Prerequisites in Windows
+```
+winget install OpenJS.NodeJS
+```
+
+### Installation
+```
+git clone https://github.com/lingottihx/candidate-project-qa-automation.git
+npm i
+npx playwright install
+```
+
+### Running test
+```
+npx playwright test
+```

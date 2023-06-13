@@ -59,7 +59,7 @@ export class SchedulePage {
                 const timeSlotButtonTestIdPrefix = `button-${providerTestId}.TimeSlot`;
 
                 const timeSlots = {
-                    getByIndex: (index: number) => providerLocator.getByTestId(new RegExp(`/${timeSlotButtonTestIdPrefix}.${index}-\\d*/`)),
+                    getByIndex: (index: number) => providerLocator.getByTestId(new RegExp(`${timeSlotButtonTestIdPrefix}.${index}-\\d*`)),
                     moreButton: providerLocator.getByTestId(`${timeSlotButtonTestIdPrefix}.moreButton`)
                 };
 
@@ -74,7 +74,7 @@ export class SchedulePage {
 
             const locationRow = clinicLocator.getByTestId(`${clinicTestId}.LocationRow`);
             const location = {
-                name: locationRow.getByRole("link"),
+                name: locationRow.getByTestId(/link-\.*/),
                 mapButton: locationRow.getByTestId(/map-button-\.*/)
             }
 
