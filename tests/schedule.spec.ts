@@ -47,3 +47,67 @@ test('Schedule page renders default values', async ({ schedulePage }) => {
   await expect(schedulePage.footer).toBeVisible();
 
 });
+
+
+test("Unauthenticated user searches the first time slot and schedules it.", async ({page, schedulePage}) => {
+  test.slow();
+
+  await schedulePage.goto();
+
+  // 3. It shows default search criteria in the filters
+  const { newSearch } = scheduleData.testCase;
+  const { location, service, date } = newSearch.filters;
+
+  // Wait until the page completes loading before clicking
+  const serviceLine = schedulePage.getServiceLine(1);
+  await expect(serviceLine.title).toBeVisible({ timeout: 30000 });
+  
+  await test.step("Change location", async() => {
+    await schedulePage.quickSelector.locationSelector.click();
+    await schedulePage.getLocationOption(location).click();
+    await expect(schedulePage.quickSelector.locationSelector).toContainText(location);  
+  });
+
+  await test.step("Change service", async() => {
+    await schedulePage.quickSelector.serviceSelector.click();
+    const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
+    await schedulePage.getServiceOption(service).click();
+    await expect.soft(schedulePage.quickSelector.serviceSelector).toContainText(service);
+    return await schedulePromise;
+  });
+  
+  await test.step("Change day only in the current month.", async () => {
+    let newDay = date.getUTCDate();
+    await schedulePage.quickSelector.dateSelector.click();
+    let expectedText: string
+    if (newDay > 1) {
+      expectedText = "Tomorrow";
+    } else {
+      newDay = new Date(Date.now()).getUTCDate();
+      expectedText = "Today";
+    }
+    await schedulePage.getDate(newDay).click();
+    await expect(schedulePage.quickSelector.dateSelector).toContainText(expectedText);    
+  }); 
+
+  await test.step("Click search button.", async () => {
+    const { searchButton } = schedulePage.quickSelector;
+    const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
+    await searchButton.click();
+    return await schedulePromise;
+  }); 
+
+  // Check service line change
+  await page.waitForRequest(/.*/);
+  const { tableHeader } = newSearch.searchResults;
+  const newServiceLine = schedulePage.getServiceLine(1)
+  await expect(newServiceLine.title).toContainText(tableHeader);
+
+  // Click first time slot.
+  const firstTimeSlot = serviceLine.getClinic(1).getProvider(1).timeSlots.getByIndex(1);
+  await firstTimeSlot.click();
+
+  // Wait for login page.
+  await page.waitForURL(/login/);
+
+});

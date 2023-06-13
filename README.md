@@ -78,7 +78,7 @@ Unauthenticated user searches the first time slot and schedules it.
 
 * Test Data
 
-1. City: "Portland, OR".
+1. City: "Seattle, WA".
 2. Service: "Primary Care".
 3. Date: "Tomorrow". Note that there may be no health providers for that date. In that case, find a date having providers available.
 

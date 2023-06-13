@@ -19,6 +19,16 @@ export const scheduleData = {
             searchResults: {
                 tableHeader: "Illness/Injury Clinic Visit",
             }        
+        },
+        newSearch: {
+            filters: {
+                location: "Seattle, WA",
+                service: "Primary Care",
+                date: new Date(Date.now() + 86400000)
+            },
+            searchResults: {
+                tableHeader: "Primary Care",
+            } 
         }
     }
     
