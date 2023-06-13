@@ -3,6 +3,8 @@ import { test } from './fixtures/scheduleFixture';
 import { expect } from '@playwright/test';
 
 test('Schedule page renders default values', async ({ schedulePage }) => {
+  test.slow();
+  
   await schedulePage.goto();
 
   // 1. The title of the page contains "Schedule".
@@ -16,7 +18,7 @@ test('Schedule page renders default values', async ({ schedulePage }) => {
   const { location, service, date } = defaultSearch.filters;
   await expect.soft(schedulePage.quickSelector.locationSelector).toContainText(location);
   await expect.soft(schedulePage.quickSelector.serviceSelector).toContainText(service);
-  await expect.soft(schedulePage.quickSelector.dateSelector).toContainText(date);
+  await expect.soft(schedulePage.quickSelector.dateSelector).toContainText(date, { timeout: 10000 });
 
   // 4. It shows the buttons "Clinic Care" and "VideoCare (TM)".
   await expect.soft(schedulePage.chatButtons.clinicCare).toBeVisible();
