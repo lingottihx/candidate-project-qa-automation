@@ -35,19 +35,18 @@ Not applicable.
     3. Date: If there are no available health providers for today, it would show the next available date.
 4. It shows the buttons "Clinic Care" and "VideoCare (TM)".
 5. It shows a table with the header "Illness/Injury Clinic Visit" with the following information:
-    1. There is a link name "Info".
-    2. There is a link with the dollar sign ($).
-    3. A list of Health providers with the following:
-        1. Clinic name.
-        2. Clinic address.
-        3. Clinic city and state code matching the search criteria. Postal code of the clinic.
+    1. There is a link named "Info | $".
+    2. A list of clinics with the following:
+        1. Name.
+        2. Address.
+        3. City and state code matching the search criteria. Postal code of the clinic.
         4. A marker link icon with the text "Map".
         5. A link named "View Clinic Services".
-        6. A list of professionals working in that clinic according to the search criteria:
-            1. Professional photo.
-            2. Professional name and title.
-            3. Professional team.
-            4. Availability date. It should match the search criteria "Today" month and date.
+        6. A list of providers working in that clinic according to the search criteria:
+            1. Provider photo.
+            2. Provider name and title.
+            3. Provider team.
+            4. Availability date. It should match the search criteria month and date.
             5. Time zone according to the city and season.
             6. Up to 5 buttons with available times.
             7. A "More" button should be visible when the there are more than five available times.
