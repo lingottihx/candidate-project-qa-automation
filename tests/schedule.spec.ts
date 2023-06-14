@@ -68,22 +68,23 @@ test("Unauthenticated user searches the first time slot and schedules it.", asyn
     await expect(schedulePage.quickSelector.locationSelector).toContainText(location);
   });
 
-  await test.step("Change service", async () => {
+  const scheduleResponse = await test.step("Change service", async () => {
     await schedulePage.quickSelector.serviceSelector.click();
     const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
     await schedulePage.getServiceOption(service).click();
     await expect.soft(schedulePage.quickSelector.serviceSelector).toContainText(service);
-    return await schedulePromise;
+    return await (await schedulePromise).json();
   });
 
   await test.step("Change day only in the current month.", async () => {
-    let newDay = date.getUTCDate();
+    const expectedDate = new Date(scheduleResponse.datesAvailable[date]);
+    let newDay = expectedDate.getDate();
     await schedulePage.quickSelector.dateSelector.click();
     let expectedText: string
     if (newDay > 1) {
       expectedText = "Tomorrow";
     } else {
-      newDay = new Date(Date.now()).getUTCDate();
+      newDay = new Date(scheduleResponse.datesAvailable[0]).getDate();
       expectedText = "Today";
     }
     await schedulePage.getDate(newDay).click();
@@ -126,7 +127,7 @@ test("Unauthenticated user search for a time slot and wants more info about a se
 
   await expect(schedulePage.quickSelector.locationSelector).toContainText(location);
 
-  await test.step("Change service", async () => {
+  const scheduleResponse = await test.step("Change service", async () => {
     await schedulePage.quickSelector.serviceSelector.click();
     const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
     await schedulePage.getServiceOption(service).click();
@@ -136,16 +137,17 @@ test("Unauthenticated user search for a time slot and wants more info about a se
 
   await test.step("Change day only in the current month.", async () => {
     await page.waitForTimeout(1000);
-    let newDay = date.getUTCDate();
+    const expectedDate = new Date(scheduleResponse.datesAvailable[date]);
+    let newDay = expectedDate.getDate();
     await schedulePage.quickSelector.dateSelector.click();
     let expectedText: string
 
     const padDate = (part: number) => part.toString().padStart(2, '0');
 
-    if (newDay > 2) {
-      expectedText = `${padDate(1+date.getUTCMonth())}/${padDate(newDay)}/${date.getFullYear()}`;
+    if (newDay > 3) {
+      expectedText = `${padDate(1+expectedDate.getMonth())}/${padDate(newDay)}/${expectedDate.getFullYear()}`;
     } else {
-      newDay = new Date(Date.now()).getUTCDate();
+      newDay = new Date(Date.now()).getDate();
       expectedText = "Today";
     }
 
