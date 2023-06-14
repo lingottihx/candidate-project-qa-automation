@@ -90,6 +90,7 @@ export class SchedulePage {
             serviceLocator,
             title: serviceLocator.getByRole("heading"),
             info: serviceLocator.getByTestId(/text-scheduler.serviceLine.info-\.*/),
+            moreInfo: serviceLocator.getByTestId("text-More Info"),
             getClinic
         };
     }

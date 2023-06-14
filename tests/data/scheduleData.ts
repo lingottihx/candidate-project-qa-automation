@@ -24,12 +24,23 @@ export const scheduleData = {
             filters: {
                 location: "Seattle, WA",
                 service: "Primary Care",
-                date: new Date(Date.now() + 86400000)
+                date: 1
             },
             searchResults: {
                 tableHeader: "Primary Care",
             } 
+        },
+        infoSearch: {
+            filters: {
+                location: "Portland, OR",
+                service: "Women's Health (Gynecology)",
+                date: 3
+            },
+            searchResults: {
+                tableHeader: "Women's Health",
+            } 
         }
+
     }
     
 }
