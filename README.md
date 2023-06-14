@@ -111,7 +111,7 @@ Unauthenticated user search for a time slot and wants more info about a service.
 * Test Data
 
 1. City: "Portland, OR".
-2. Service: "Women health's (Ginecology)".
+2. Service: "Women health's (Gynecology)".
 
 * Expected Results
 
@@ -193,7 +193,7 @@ Unauthenticated user search for a time slot and wants to know what services a cl
 * Test Data
 
 1. City: "Portland, OR".
-2. Service: "Women health's (Ginecology)".
+2. Service: "Women health's (Gynecology)".
 
 * Expected Results
 
@@ -229,7 +229,7 @@ Unauthenticated user search the last available time slot.
 * Test Data
 
 1. City: "Portland, OR".
-2. Service: "Women health's (Ginecology)".
+2. Service: "Women health's (Gynecology)".
 
 * Expected Results
 
@@ -258,7 +258,7 @@ Unauthenticated user search for the next available time slots for the desired cl
 * Test Data
 
 1. City: "Portland, OR".
-2. Symptoms: "Woman's health (Ginecology)".
+2. Symptoms: "Woman's health (Gynecology)".
 3. Date: "Today".
 4. Clinic: "Pearl District - Midnight"
 
@@ -269,18 +269,21 @@ The search filter date updates to the date in the "Next Available:" button. Then
 ## Part 2
 
 ### Prerequisites in Windows
-```
+
+``` powershell
 winget install OpenJS.NodeJS
 ```
 
 ### Installation
-```
+
+``` powershell
 git clone https://github.com/lingottihx/candidate-project-qa-automation.git
 npm i
 npx playwright install
 ```
 
 ### Running test
-```
+
+``` powershell
 npx playwright test
 ```
