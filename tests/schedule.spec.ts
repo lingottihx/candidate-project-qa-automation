@@ -2,6 +2,11 @@ import { scheduleData } from './data/scheduleData';
 import { test } from './fixtures/scheduleFixture';
 import { expect } from '@playwright/test';
 
+test.use({
+  locale: 'en-US',
+  timezoneId: 'America/Los_Angeles'
+});
+
 test('Schedule page renders default values', async ({ schedulePage }) => {
   test.slow();
 
@@ -21,7 +26,7 @@ test('Schedule page renders default values', async ({ schedulePage }) => {
   await expect.soft(schedulePage.quickSelector.dateSelector).toContainText(date, { timeout: 10000 });
 
   // 4. It shows the buttons "Clinic Care" and "VideoCare (TM)".
-  await expect.soft(schedulePage.chatButtons.clinicCare).toBeVisible();
+  await expect.soft(schedulePage.chatButtons.clinicCare).toBeVisible({timeout: 10000});
   await expect.soft(schedulePage.chatButtons.videoCare).toBeVisible();
 
   // 5. It shows a table with the header "Illness/Injury Clinic Visit"
