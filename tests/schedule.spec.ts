@@ -4,7 +4,7 @@ import { expect } from '@playwright/test';
 
 test('Schedule page renders default values', async ({ schedulePage }) => {
   test.slow();
-  
+
   await schedulePage.goto();
 
   // 1. The title of the page contains "Schedule".
@@ -49,7 +49,7 @@ test('Schedule page renders default values', async ({ schedulePage }) => {
 });
 
 
-test("Unauthenticated user searches the first time slot and schedules it.", async ({page, schedulePage}) => {
+test("Unauthenticated user searches the first time slot and schedules it.", async ({ page, schedulePage }) => {
   test.slow();
 
   await schedulePage.goto();
@@ -61,21 +61,21 @@ test("Unauthenticated user searches the first time slot and schedules it.", asyn
   // Wait until the page completes loading before clicking
   const serviceLine = schedulePage.getServiceLine(1);
   await expect(serviceLine.title).toBeVisible({ timeout: 30000 });
-  
-  await test.step("Change location", async() => {
+
+  await test.step("Change location", async () => {
     await schedulePage.quickSelector.locationSelector.click();
     await schedulePage.getLocationOption(location).click();
-    await expect(schedulePage.quickSelector.locationSelector).toContainText(location);  
+    await expect(schedulePage.quickSelector.locationSelector).toContainText(location);
   });
 
-  await test.step("Change service", async() => {
+  await test.step("Change service", async () => {
     await schedulePage.quickSelector.serviceSelector.click();
     const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
     await schedulePage.getServiceOption(service).click();
     await expect.soft(schedulePage.quickSelector.serviceSelector).toContainText(service);
     return await schedulePromise;
   });
-  
+
   await test.step("Change day only in the current month.", async () => {
     let newDay = date.getUTCDate();
     await schedulePage.quickSelector.dateSelector.click();
@@ -87,18 +87,17 @@ test("Unauthenticated user searches the first time slot and schedules it.", asyn
       expectedText = "Today";
     }
     await schedulePage.getDate(newDay).click();
-    await expect(schedulePage.quickSelector.dateSelector).toContainText(expectedText);    
-  }); 
+    await expect(schedulePage.quickSelector.dateSelector).toContainText(expectedText);
+  });
 
   await test.step("Click search button.", async () => {
     const { searchButton } = schedulePage.quickSelector;
     const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
     await searchButton.click();
     return await schedulePromise;
-  }); 
+  });
 
   // Check service line change
-  await page.waitForRequest(/.*/);
   const { tableHeader } = newSearch.searchResults;
   const newServiceLine = schedulePage.getServiceLine(1)
   await expect(newServiceLine.title).toContainText(tableHeader);
@@ -109,5 +108,71 @@ test("Unauthenticated user searches the first time slot and schedules it.", asyn
 
   // Wait for login page.
   await page.waitForURL(/login/);
+
+});
+
+test("Unauthenticated user search for a time slot and wants more info about a service.", async ({ page, schedulePage }) => {
+  test.slow();
+
+  await schedulePage.goto();
+
+  // 3. It shows default search criteria in the filters
+  const { infoSearch } = scheduleData.testCase;
+  const { location, service, date } = infoSearch.filters;
+
+  // Wait until the page completes loading before clicking
+  const serviceLine = schedulePage.getServiceLine(1);
+  await expect(serviceLine.info).toBeVisible({ timeout: 30000 });
+
+  await expect(schedulePage.quickSelector.locationSelector).toContainText(location);
+
+  await test.step("Change service", async () => {
+    await schedulePage.quickSelector.serviceSelector.click();
+    const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
+    await schedulePage.getServiceOption(service).click();
+    await expect.soft(schedulePage.quickSelector.serviceSelector).toContainText(service);
+    return await (await schedulePromise).json();
+  });
+
+  await test.step("Change day only in the current month.", async () => {
+    await page.waitForTimeout(1000);
+    let newDay = date.getUTCDate();
+    await schedulePage.quickSelector.dateSelector.click();
+    let expectedText: string
+
+    const padDate = (part: number) => part.toString().padStart(2, '0');
+
+    if (newDay > 2) {
+      expectedText = `${padDate(1+date.getUTCMonth())}/${padDate(newDay)}/${date.getFullYear()}`;
+    } else {
+      newDay = new Date(Date.now()).getUTCDate();
+      expectedText = "Today";
+    }
+
+    await schedulePage.getDate(newDay).click();
+    await expect(schedulePage.quickSelector.dateSelector).toContainText(expectedText);
+  });
+
+  await test.step("Click search button.", async () => {
+    const { searchButton } = schedulePage.quickSelector;
+    const schedulePromise = page.waitForResponse("https://api-prod.zoomcare.com/v1/schedule");
+    await searchButton.click();
+    return await schedulePromise;
+  });
+
+  // Check service line change
+  const { tableHeader } = infoSearch.searchResults;
+  const newServiceLine = schedulePage.getServiceLine(1)
+  await expect(newServiceLine.title).toContainText(tableHeader);
+
+  await test.step("Get info", async () => {
+    await newServiceLine.info.click();
+    await expect(serviceLine.moreInfo).toBeVisible();  
+  });
+
+  await test.step("Hide info", async () => {
+    await newServiceLine.info.click();
+    await expect(serviceLine.moreInfo).toBeHidden();  
+  });
 
 });

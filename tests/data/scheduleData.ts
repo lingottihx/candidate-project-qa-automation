@@ -29,7 +29,18 @@ export const scheduleData = {
             searchResults: {
                 tableHeader: "Primary Care",
             } 
+        },
+        infoSearch: {
+            filters: {
+                location: "Portland, OR",
+                service: "Women's Health (Gynecology)",
+                date: new Date(Date.now() + 2 * 86400000)
+            },
+            searchResults: {
+                tableHeader: "Women's Health",
+            } 
         }
+
     }
     
 }
